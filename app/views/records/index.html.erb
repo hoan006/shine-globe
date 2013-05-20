@@ -1,0 +1,46 @@
+<h1>Listing records</h1>
+
+<table>
+  <tr>
+    <th>Timestamp</th>
+    <th>Point</th>
+    <th>Step</th>
+    <th>Longitude</th>
+    <th>Latitude</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @records.each do |record| %>
+  <tr>
+    <td><%= record.timestamp %></td>
+    <td><%= record.point %></td>
+    <td><%= record.step %></td>
+    <td><%= record.longitude %></td>
+    <td><%= record.latitude %></td>
+    <td><%= link_to 'Show', record %></td>
+    <td><%= link_to 'Edit', edit_record_path(record) %></td>
+    <td><%= link_to 'Destroy', record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Record', new_record_path %>
+
+<%= link_to "Update Globe", update_globe_path, remote: true, id: "ajax_trigger" %>
+
+<script type="text/javascript">
+$(document).ready(
+    function(){
+        $("a#ajax_trigger").bind("ajax:success",function(evt, data, status, xhr){
+            //this assumes the action returns an HTML snippet
+            alert(data.message);
+        }).bind("ajax:error", function(evt, data, status, xhr){
+            alert(JSON.stringify(data));
+        });
+    }
+);
+</script>
