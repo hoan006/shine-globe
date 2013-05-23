@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(:version => 20130520080421) do
 
   create_table "records", :force => true do |t|
     t.integer  "timestamp"
+    t.string   "serial"
     t.integer  "point"
     t.integer  "step"
     t.float    "longitude"

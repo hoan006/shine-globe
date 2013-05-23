@@ -2,6 +2,7 @@ class CreateRecords < ActiveRecord::Migration
   def change
     create_table :records do |t|
       t.integer :timestamp
+      t.string :serial
       t.integer :point
       t.integer :step
       t.float :longitude

@@ -2,6 +2,7 @@
 
 <table>
   <tr>
+    <th>Serial</th>
     <th>Timestamp</th>
     <th>Point</th>
     <th>Step</th>
@@ -14,6 +15,7 @@
 
 <% @records.each do |record| %>
   <tr>
+    <td><%= record.serial %></td>
     <td><%= record.timestamp %></td>
     <td><%= record.point %></td>
     <td><%= record.step %></td>
@@ -27,10 +29,13 @@
 </table>
 
 <br />
-
-<%= link_to 'New Record', new_record_path %>
-
+<%= link_to 'New Record', new_record_path %> 
+| 
+<%= link_to 'Random Record', random_record_path %>
+<br/>
 <%= link_to "Update Globe", update_globe_path, remote: true, id: "ajax_trigger" %>
+|
+<%= link_to "Return to Globe", "/globe" %>
 
 <script type="text/javascript">
 $(document).ready(

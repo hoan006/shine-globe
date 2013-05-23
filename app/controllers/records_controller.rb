@@ -85,24 +85,48 @@ class RecordsController < ApplicationController
   def update_globe
     data = Hash.new
     Record.find_each do |record|
-      point_step = data[[record.latitude, record.longitude]] || [0, 0]
-      data[[record.latitude, record.longitude]] = [point_step.first + record.point, point_step.last + record.step]
+      point_step = data[[record.latitude, record.longitude]] || [0, 0, Set.new]
+      data[[record.latitude, record.longitude]] = [point_step.first + record.point, point_step.second + record.step, point_step.last << record.serial]
     end
     
-    point_arr = step_arr = []
-    max_point = max_step = 1.0
+    point_arr = step_arr = number_arr = []
+    max_point = max_step = max_number_serials = 1.0
     data.each do |k, v|
       max_point = v.first.to_f if max_point < v.first
-      max_step = v.last.to_f if max_step < v.last
+      max_step = v.second.to_f if max_step < v.second
+      max_number_serials = v.last.size.to_f if max_number_serials < v.last.size
     end
     
     data.each do |k, v|
       point_arr += k + [ (v.first / max_point).round(3) ]
-      step_arr += k + [ (v.last / max_step).round(3) ]
+      step_arr += k + [ (v.second / max_step).round(3) ]
+      number_arr += k + [ (v.last.size / max_number_serials).round(3) ]
     end
-    result = [["point", point_arr], ["step", step_arr]]
+    result = [["number", number_arr], ["point", point_arr], ["step", step_arr]]
     
-    File.open("#{Rails.root}/public/globe/data.json", "wb") { |file| file.write result.to_json }
+    File.open("#{Rails.root}/data/data.json", "wb") { |file| file.write result.to_json }
     render json: {message: "Done"}
+  end
+  
+  # GET /records/data
+  def data
+    respond_to do |format|
+      format.html {render nothing: true}
+      format.json do
+        json_data = File.read("#{Rails.root}/data/data.json")
+        send_data json_data, :type => 'text/html; charset=utf-8; header=present', :disposition => "attachment; filename=data.json"
+      end
+    end
+  end
+  
+  # POST /records/random
+  def random
+    Record.create!(serial: "XXXXXXXE0#{rand(10)}",
+                   timestamp: Time.now.to_i,
+                   latitude: (rand * 180 - 90).round(3),
+                   longitude: (rand * 360).round(3),
+                   point: rand(1000),
+                   step: rand(1000))
+    redirect_to records_path
   end
 end

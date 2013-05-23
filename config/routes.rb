@@ -1,5 +1,7 @@
 ShineGlobe::Application.routes.draw do
   resources :records
+  match "/random_record" => "records#random", as: :random_record
+  match "/data" => "records#data"
   
   match 'update_globe' => "records#update_globe"
 

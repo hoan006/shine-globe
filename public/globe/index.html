@@ -110,13 +110,15 @@
   </div>
 
   <div id="currentInfo">
+    <span id="yearNumber" class="year">Number</span>
     <span id="yearPoint" class="year">Point</span>
     <span id="yearStep" class="year">Step</span>
   </div>
 
   <div id="title">
-    World Population
+    <a href="/records">Shine through the World</a>    
   </div>
+  
 
   <a id="ce" href="http://www.chromeexperiments.com/globe">
     <span>This is a Chrome Experiment</span>
@@ -134,7 +136,7 @@
       Detector.addGetWebGLMessage();
     } else {
 
-      var years = ['Point','Step'];
+      var years = ['Number', 'Point','Step'];
       var container = document.getElementById('container');
       var globe = new DAT.Globe(container);
       console.log(globe);
@@ -165,7 +167,7 @@
 
 
       xhr = new XMLHttpRequest();
-      xhr.open('GET', '/globe/data.json', true);
+      xhr.open('GET', '/data.json', true);
       xhr.onreadystatechange = function(e) {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
